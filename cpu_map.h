@@ -45,11 +45,11 @@
 #define XY_DIR_PORT	PORTF
 #define XY_DIR_MASK ((1<<X_DIR_BIT)|(1<<Y_DIR_BIT))
 
-#define X_ENA_DDR	DDRD
+#define X_ENA_DDR	  DDRD
 #define X_ENA_PORT	PORTD
-#define X_ENA_BIT	7 // MEGA 2560 D38
+#define X_ENA_BIT	  7 // MEGA 2560 D38
 
-#define Y_ENA_DDR	DDRF
+#define Y_ENA_DDR	  DDRF
 #define Y_ENA_PORT  PORTF
 #define Y_ENA_BIT   2 // MEGA 2560 A2
 
@@ -58,10 +58,10 @@
 #define Z_STP_PORT  PORTL
 #define Z_STP_BIT   3 // MEGA 2560 D46
 
-#define Z_DIR_DDR	DDRL
-#define Z_DIR_PIN	PINL
+#define Z_DIR_DDR	  DDRL
+#define Z_DIR_PIN	  PINL
 #define Z_DIR_PORT	PORTL
-#define Z_DIR_BIT	1 // MEGA 2560 D48
+#define Z_DIR_BIT	  1 // MEGA 2560 D48
 
 #define Z_ENA_DDR   DDRK
 #define Z_ENA_PORT  PORTK
@@ -72,10 +72,10 @@
 #define A_STP_PORT  PORTA
 #define A_STP_BIT   4 // MEGA 2560 D26
 
-#define A_DIR_DDR	DDRA
-#define A_DIR_PIN	PINA
+#define A_DIR_DDR	  DDRA
+#define A_DIR_PIN	  PINA
 #define A_DIR_PORT	PORTA
-#define A_DIR_BIT	6 // MEGA 2560 D28
+#define A_DIR_BIT	  6 // MEGA 2560 D28
 
 #define A_ENA_DDR   DDRA
 #define A_ENA_PORT  PORTA
@@ -87,7 +87,7 @@
 #define COOLANT_FLOOD_BIT   6 // MEGA 2560 D9
 
 // RAMPS D10 MOSFET GCODE M7-ON/M9-OFF
-#define COOLANT_MIST_DDR	DDRB
+#define COOLANT_MIST_DDR	  DDRB
 #define COOLANT_MIST_PORT   PORTB
 #define COOLANT_MIST_BIT    4 // MEGA 2560 D10
 
