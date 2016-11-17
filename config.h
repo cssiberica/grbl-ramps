@@ -151,7 +151,7 @@
 // Inverts pin logic of the control command pins. This essentially means when this option is enabled
 // you can use normally-closed switches, rather than the default normally-open switches.
 // NOTE: If you require individual control pins inverted, keep this macro disabled and simply alter
-//   the CONTROL_INVERT_MASK definition in cpu_map.h files.
+// the CONTROL_INVERT_MASK definition in cpu_map.h files.
 // #define INVERT_ALL_CONTROL_PINS // Default disabled. Uncomment to enable.
 
 // Inverts select limit pin states based on the following mask. This effects all limit pin functions, 
@@ -248,8 +248,8 @@
 // equally divided voltage bins between the maximum and minimum spindle speeds. So for a 5V pin, 1000
 // max rpm, and 250 min rpm, the spindle output voltage would be set for the following "S" commands: 
 // "S1000" @ 5V, "S250" @ 0.02V, and "S625" @ 2.5V (mid-range). The pin outputs 0V when disabled.
-#define SPINDLE_MAX_RPM 1000.0 // Max spindle RPM. This value is equal to 100% duty cycle on the PWM.
 #define SPINDLE_MIN_RPM 0.0    // Min spindle RPM. This value is equal to (1/256) duty cycle on the PWM.
+#define SPINDLE_MAX_RPM 1000.0 // Max spindle RPM. This value is equal to 100% duty cycle on the PWM.
 
 // Used by variable spindle output only. This forces the PWM output to a minimum duty cycle when enabled.
 // When disabled, the PWM pin will still read 0V. Most users will not need this option, but it may be 

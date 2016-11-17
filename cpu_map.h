@@ -45,11 +45,11 @@
 #define XY_DIR_PORT	PORTF
 #define XY_DIR_MASK ((1<<X_DIR_BIT)|(1<<Y_DIR_BIT))
 
-#define X_ENA_DDR	  DDRD
+#define X_ENA_DDR	DDRD
 #define X_ENA_PORT	PORTD
-#define X_ENA_BIT	  7 // MEGA 2560 D38
+#define X_ENA_BIT	7 // MEGA 2560 D38
 
-#define Y_ENA_DDR	  DDRF
+#define Y_ENA_DDR	DDRF
 #define Y_ENA_PORT  PORTF
 #define Y_ENA_BIT   2 // MEGA 2560 A2
 
@@ -58,8 +58,8 @@
 #define Z_STP_PORT  PORTL
 #define Z_STP_BIT   3 // MEGA 2560 D46
 
-#define Z_DIR_DDR	  DDRL
-#define Z_DIR_PIN	  PINL
+#define Z_DIR_DDR	DDRL
+#define Z_DIR_PIN	PINL
 #define Z_DIR_PORT	PORTL
 #define Z_DIR_BIT	  1 // MEGA 2560 D48
 
@@ -72,10 +72,10 @@
 #define A_STP_PORT  PORTA
 #define A_STP_BIT   4 // MEGA 2560 D26
 
-#define A_DIR_DDR	  DDRA
-#define A_DIR_PIN	  PINA
+#define A_DIR_DDR	DDRA
+#define A_DIR_PIN	PINA
 #define A_DIR_PORT	PORTA
-#define A_DIR_BIT	  6 // MEGA 2560 D28
+#define A_DIR_BIT	6 // MEGA 2560 D28
 
 #define A_ENA_DDR   DDRA
 #define A_ENA_PORT  PORTA
@@ -87,37 +87,33 @@
 #define COOLANT_FLOOD_BIT   6 // MEGA 2560 D9
 
 // RAMPS D10 MOSFET GCODE M7-ON/M9-OFF
-#define COOLANT_MIST_DDR	  DDRB
+#define COOLANT_MIST_DDR	DDRB
 #define COOLANT_MIST_PORT   PORTB
 #define COOLANT_MIST_BIT    4 // MEGA 2560 D10
 
-// RAMPS D8 MOSFET WITH PWM (LASER) M3SXXX ON / M5 OFF
+// Define spindle enable and spindle direction output pins.
+#define SPINDLE_ENABLE_DDR      DDRC
+#define SPINDLE_ENABLE_PORT     PORTC
+#define SPINDLE_ENABLE_BIT      4 // MEGA2560 A12
+#define SPINDLE_DIRECTION_DDR   DDRC
+#define SPINDLE_DIRECTION_PORT  PORTC
+#define SPINDLE_DIRECTION_BIT   5 // MEGA2560 A13
+
+// RAMPS D7-D8 SOLDER WIRE MOSFET WITH PWM (LASER) M3SXXX ON / M5 OFF
+// Start of PWM & Stepper Enabled Spindle
 #ifdef VARIABLE_SPINDLE
-// Advanced Configuration Below You should not need to touch these variables
-// Set Timer up to use TIMER4B which is attached to Digital Pin 7
-
-#define PWM_MAX_VALUE   65535.0
-
-#define TCCRA_REGISTER  TCCR4A
-
-//#define TCCRB_REGISTER  TCCR4B
-//#define OCR_REGISTER    OCR4B
-#define TCCRC_REGISTER  TCCR4C
-#define OCR_REGISTER    OCR4C
-
-
-//#define COMB_BIT        COM4B1
-#define COMC_BIT        COM4C1
-
-#define WAVE0_REGISTER  WGM40
-#define WAVE1_REGISTER  WGM41
-#define WAVE2_REGISTER  WGM42
-#define WAVE3_REGISTER  WGM43
-
-#define SPINDLE_PWM_DDR  DDRH
-#define SPINDLE_PWM_PORT PORTH
-#define SPINDLE_PWM_BIT  5   // MEGA 2560 D8
-
+#define PWM_MAX_VALUE       65535.0
+#define TCCRA_REGISTER		TCCR4A
+#define TCCRB_REGISTER		TCCR4B
+#define OCR_REGISTER		OCR4B
+#define COMB_BIT			COM4B1
+#define WAVE0_REGISTER		WGM40
+#define WAVE1_REGISTER		WGM41
+#define WAVE2_REGISTER		WGM42
+#define WAVE3_REGISTER		WGM43
+#define SPINDLE_PWM_DDR		DDRH
+#define SPINDLE_PWM_PORT    PORTH
+#define SPINDLE_PWM_BIT		4 // MEGA 2560 D7
 #endif // End of VARIABLE_SPINDLE
 
 // Define homing/hard limit switch input pins and limit interrupt vectors. 
@@ -133,22 +129,12 @@
 #define LIMIT_PCMSK     PCMSK0  // Pin change interrupt register
 #define LIMIT_MASK ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
 
-// Define spindle enable and spindle direction output pins.
-#define SPINDLE_ENABLE_DDR      DDRC
-#define SPINDLE_ENABLE_PORT     PORTC
-#define SPINDLE_ENABLE_BIT      4 // MEGA2560 A12
-#define SPINDLE_DIRECTION_DDR   DDRC
-#define SPINDLE_DIRECTION_PORT  PORTC
-#define SPINDLE_DIRECTION_BIT   5 // MEGA2560 A13
-
-
 // Define probe switch input pin.
 #define PROBE_DDR       DDRH
 #define PROBE_PIN       PINH
 #define PROBE_PORT      PORTH
 #define PROBE_BIT       3  // MEGA2560 D6
 #define PROBE_MASK      (1<<PROBE_BIT)
-
 
 // Define user-control CONTROLs (cycle start, reset, feed hold) input pins.
 // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
