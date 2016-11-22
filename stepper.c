@@ -185,16 +185,32 @@ void st_wake_up() {
 
     // Enable stepper drivers.
     if (bit_istrue(settings.flags, BITFLAG_INVERT_ST_ENABLE)) {
-		X_ENA_PORT |= (1 << X_ENA_BIT);
-		Y_ENA_PORT |= (1 << Y_ENA_BIT);
-		Z_ENA_PORT |= (1 << Z_ENA_BIT);
-		A_ENA_PORT |= (1 << A_ENA_BIT);
+		
+		E2_ENA_PORT|=(1<<E2_ENA_BIT);
+		E3_ENA_PORT|=(1<<E3_ENA_BIT);
+		E4_ENA_PORT|=(1<<E4_ENA_BIT);
+		E0_ENA_PORT|=(1<<E0_ENA_BIT);
+		E1_ENA_PORT|=(1<<E1_ENA_BIT);
+		
+		//X_ENA_PORT |= (1 << X_ENA_BIT);
+		//Y_ENA_PORT |= (1 << Y_ENA_BIT);
+		//Z_ENA_PORT |= (1 << Z_ENA_BIT);
+		//A_ENA_PORT |= (1 << A_ENA_BIT);
+
 	} else {
-		X_ENA_PORT &= ~(1 << X_ENA_BIT);
-		Y_ENA_PORT &= ~(1 << Y_ENA_BIT);
-		Z_ENA_PORT &= ~(1 << Z_ENA_BIT);
-		A_ENA_PORT &= ~(1 << A_ENA_BIT);
-    }
+	
+		E2_ENA_PORT&=~(1<<E2_ENA_BIT);
+		E3_ENA_PORT&=~(1<<E3_ENA_BIT);
+		E4_ENA_PORT&=~(1<<E4_ENA_BIT);
+		E0_ENA_PORT&=~(1<<E0_ENA_BIT);
+		E1_ENA_PORT&=~(1<<E1_ENA_BIT);
+
+		//X_ENA_PORT &= ~(1 << X_ENA_BIT);
+		//Y_ENA_PORT &= ~(1 << Y_ENA_BIT);
+		//Z_ENA_PORT &= ~(1 << Z_ENA_BIT);
+		//A_ENA_PORT &= ~(1 << A_ENA_BIT);
+    
+	}
 
     if (sys.state & (STATE_CYCLE | STATE_HOMING)) {
         // Initialize stepper output bits
@@ -242,16 +258,33 @@ void st_go_idle() {
 	
 	//Apply pin invert.
     if (pin_state) {
-		X_ENA_PORT |= (1 << X_ENA_BIT);
-		Y_ENA_PORT |= (1 << Y_ENA_BIT);
-		Z_ENA_PORT |= (1 << Z_ENA_BIT);
-		A_ENA_PORT |= (1 << A_ENA_BIT);
+		
+		E2_ENA_PORT|=(1<<E2_ENA_BIT);
+		E3_ENA_PORT|=(1<<E3_ENA_BIT);
+		E4_ENA_PORT|=(1<<E4_ENA_BIT);
+		E0_ENA_PORT|=(1<<E0_ENA_BIT);
+		E1_ENA_PORT|=(1<<E1_ENA_BIT);
+		
+		//X_ENA_PORT |= (1 << X_ENA_BIT);
+		//Y_ENA_PORT |= (1 << Y_ENA_BIT);
+		//Z_ENA_PORT |= (1 << Z_ENA_BIT);
+		//A_ENA_PORT |= (1 << A_ENA_BIT);
+	
 	} else {
-		X_ENA_PORT &= ~(1 << X_ENA_BIT);
-		Y_ENA_PORT &= ~(1 << Y_ENA_BIT);
-		Z_ENA_PORT &= ~(1 << Z_ENA_BIT);
-		A_ENA_PORT &= ~(1 << A_ENA_BIT);
+	
+		E2_ENA_PORT&=~(1<<E2_ENA_BIT);
+		E3_ENA_PORT&=~(1<<E3_ENA_BIT);
+		E4_ENA_PORT&=~(1<<E4_ENA_BIT);
+		E0_ENA_PORT&=~(1<<E0_ENA_BIT);
+		E1_ENA_PORT&=~(1<<E1_ENA_BIT);
+
+		//X_ENA_PORT &= ~(1 << X_ENA_BIT);
+		//Y_ENA_PORT &= ~(1 << Y_ENA_BIT);
+		//Z_ENA_PORT &= ~(1 << Z_ENA_BIT);
+		//A_ENA_PORT &= ~(1 << A_ENA_BIT);
+	
 	}
+
 }
 
 
@@ -309,18 +342,26 @@ ISR(TIMER1_COMPA_vect) {
     if (busy) return; // The busy-flag is used to avoid reentering this interrupt
 
     // Set the direction pins a couple of nanoseconds before we step the steppers
-	XY_DIR_PORT = (XY_DIR_PORT & ~XY_DIR_MASK) | (st.dir_outbits & XY_DIR_MASK);
-	Z_DIR_PORT = (Z_DIR_PORT & ~(1<<Z_DIR_BIT)) | (st.dir_outbits & (1<<Z_DIR_BIT));
-	A_DIR_PORT = (A_DIR_PORT & ~(1<<A_DIR_BIT)) | (st.dir_outbits & (1<<A_DIR_BIT));
+	E2_DIR_PORT = (E2_DIR_PORT & ~(1 << E2_DIR_BIT)) | (st.dir_outbits & (1 << E2_DIR_BIT));
+	E3_DIR_PORT = (E3_DIR_PORT & ~(1 << E3_DIR_BIT)) | (st.dir_outbits & (1 << E3_DIR_BIT));
+	E4_DIR_PORT = (E4_DIR_PORT & ~(1 << E4_DIR_BIT)) | (((st.dir_outbits & (1 << E3_DIR_BIT)) >> E3_DIR_BIT) << E4_DIR_BIT);
+	
+	//XY_DIR_PORT = (XY_DIR_PORT & ~XY_DIR_MASK) | (st.dir_outbits & XY_DIR_MASK);
+	//Z_DIR_PORT = (Z_DIR_PORT & ~(1<<Z_DIR_BIT)) | (st.dir_outbits & (1<<Z_DIR_BIT));
+	//A_DIR_PORT = (A_DIR_PORT & ~(1<<A_DIR_BIT)) | (st.dir_outbits & (1<<A_DIR_BIT));
 	
     // Then pulse the stepping pins
 #ifdef STEP_PULSE_DELAY
     st.step_bits = (STEP_PORT & ~STEP_MASK) | st.step_outbits; // Store out_bits to prevent overwriting.
 #else  // Normal operation
 
-	XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (st.step_outbits & XY_STP_MASK);
-	Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (st.step_outbits & (1<<Z_STP_BIT));
-	A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (st.step_outbits & (1<<A_STP_BIT));
+	E2_STP_PORT = (E2_STP_PORT & ~(1 << E2_STP_BIT)) | (st.step_outbits & (1 << E2_STP_BIT));
+	E3_STP_PORT = (E3_STP_PORT & ~(1 << E3_STP_BIT)) | (st.step_outbits & (1 << E3_STP_BIT));
+	E4_STP_PORT = (E4_STP_PORT & ~(1 << E4_STP_BIT)) | (((st.step_outbits & (1 << E3_STP_BIT)) >> E3_STP_BIT) << E4_STP_BIT);
+	
+	//XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (st.step_outbits & XY_STP_MASK);
+	//Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (st.step_outbits & (1<<Z_STP_BIT));
+	//A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (st.step_outbits & (1<<A_STP_BIT));
 	
 #endif  
 
@@ -389,9 +430,9 @@ ISR(TIMER1_COMPA_vect) {
     st.counter_x += st.exec_block->steps[X_AXIS];
 #endif  
     if (st.counter_x > st.exec_block->step_event_count) {
-        st.step_outbits |= (1 << X_STP_BIT);
+        st.step_outbits |= (1 << E2_STP_BIT);
         st.counter_x -= st.exec_block->step_event_count;
-        if (st.exec_block->direction_bits & (1 << X_DIR_BIT)) {
+        if (st.exec_block->direction_bits & (1 << E2_DIR_BIT)) {
             sys.position[X_AXIS]--;
         } else {
             sys.position[X_AXIS]++;
@@ -403,9 +444,9 @@ ISR(TIMER1_COMPA_vect) {
     st.counter_y += st.exec_block->steps[Y_AXIS];
 #endif    
     if (st.counter_y > st.exec_block->step_event_count) {
-        st.step_outbits |= (1 << Y_STP_BIT);
+        st.step_outbits |= (1 << E3_STP_BIT);
         st.counter_y -= st.exec_block->step_event_count;
-        if (st.exec_block->direction_bits & (1 << Y_DIR_BIT)) {
+        if (st.exec_block->direction_bits & (1 << E3_DIR_BIT)) {
             sys.position[Y_AXIS]--;
         } else {
             sys.position[Y_AXIS]++;
@@ -417,9 +458,9 @@ ISR(TIMER1_COMPA_vect) {
     st.counter_z += st.exec_block->steps[Z_AXIS];
 #endif  
     if (st.counter_z > st.exec_block->step_event_count) {
-        st.step_outbits |= (1 << Z_STP_BIT);
+        st.step_outbits |= (1 << E0_STP_BIT);
         st.counter_z -= st.exec_block->step_event_count;
-        if (st.exec_block->direction_bits & (1 << Z_DIR_BIT)) {
+        if (st.exec_block->direction_bits & (1 << E0_DIR_BIT)) {
             sys.position[Z_AXIS]--;
         } else {
             sys.position[Z_AXIS]++;
@@ -432,9 +473,9 @@ ISR(TIMER1_COMPA_vect) {
     st.counter_a += st.exec_block->steps[A_AXIS];
 #endif  
     if (st.counter_a > st.exec_block->step_event_count) {
-        st.step_outbits |= (1 << A_STP_BIT);
+        st.step_outbits |= (1 << E1_STP_BIT);
         st.counter_a -= st.exec_block->step_event_count;
-        if (st.exec_block->direction_bits & (1 << A_DIR_BIT)) {
+        if (st.exec_block->direction_bits & (1 << E1_DIR_BIT)) {
             sys.position[A_AXIS]--;
         } else {
             sys.position[A_AXIS]++;
@@ -476,9 +517,13 @@ ISR(TIMER1_COMPA_vect) {
 ISR(TIMER0_OVF_vect) {
 
     // Reset stepping pins (leave the direction pins)
-	XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (step_port_invert_mask & XY_STP_MASK);
-	Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (step_port_invert_mask & (1<<Z_STP_BIT));
-	A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (step_port_invert_mask & (1<<A_STP_BIT));
+	E2_STP_PORT = (E2_STP_PORT & ~(1 << E2_STP_BIT)) | (step_port_invert_mask & (1 << E2_STP_BIT));
+	E3_STP_PORT = (E3_STP_PORT & ~(1 << E3_STP_BIT)) | (step_port_invert_mask & (1 << E3_STP_BIT));
+	E4_STP_PORT = (E4_STP_PORT & ~(1 << E4_STP_BIT)) | (((step_port_invert_mask & (1 << E3_STP_BIT)) >> E3_STP_BIT) << E4_STP_BIT);
+	
+	//XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (step_port_invert_mask & XY_STP_MASK);
+	//Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (step_port_invert_mask & (1<<Z_STP_BIT));
+	//A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (step_port_invert_mask & (1<<A_STP_BIT));
 	TCCR0B = 0; // Disable Timer0 to prevent re-entering this interrupt when it's not needed. 
 
 }
@@ -530,32 +575,60 @@ void st_reset() {
     st_generate_step_dir_invert_masks();
 
     // Initialize step and direction port pins.
-	XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (step_port_invert_mask & XY_STP_MASK);
-	Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (step_port_invert_mask & (1<<Z_STP_BIT));
-	A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (step_port_invert_mask & (1<<A_STP_BIT));
+	E2_DIR_PORT = (E2_DIR_PORT & ~(1 << E2_DIR_BIT)) | (dir_port_invert_mask & (1 << E2_DIR_BIT));
+	E3_DIR_PORT = (E3_DIR_PORT & ~(1 << E3_DIR_BIT)) | (dir_port_invert_mask & (1 << E3_DIR_BIT));
+	E4_DIR_PORT = (E4_DIR_PORT & ~(1 << E4_DIR_BIT)) | (((dir_port_invert_mask & (1 << E3_DIR_BIT)) >> E3_DIR_BIT) << E4_DIR_BIT);
 	
-	XY_DIR_PORT = (XY_DIR_PORT & ~XY_DIR_MASK) | (dir_port_invert_mask & XY_DIR_MASK);	
-	Z_DIR_PORT = (Z_DIR_PORT & ~(1<<Z_DIR_BIT)) | (dir_port_invert_mask & (1<<Z_DIR_BIT));
-	A_DIR_PORT = (A_DIR_PORT & ~(1<<A_DIR_BIT)) | (dir_port_invert_mask & (1<<A_DIR_BIT));
+	//XY_DIR_PORT = (XY_DIR_PORT & ~XY_DIR_MASK) | (dir_port_invert_mask & XY_DIR_MASK);	
+	//Z_DIR_PORT = (Z_DIR_PORT & ~(1<<Z_DIR_BIT)) | (dir_port_invert_mask & (1<<Z_DIR_BIT));
+	//A_DIR_PORT = (A_DIR_PORT & ~(1<<A_DIR_BIT)) | (dir_port_invert_mask & (1<<A_DIR_BIT));
 
+	E2_STP_PORT = (E2_STP_PORT & ~(1 << E2_STP_BIT)) | (step_port_invert_mask & (1 << E2_STP_BIT));
+	E3_STP_PORT = (E3_STP_PORT & ~(1 << E3_STP_BIT)) | (step_port_invert_mask & (1 << E3_STP_BIT));
+	E4_STP_PORT = (E4_STP_PORT & ~(1 << E4_STP_BIT)) | (((step_port_invert_mask & (1 << E3_STP_BIT)) >> E3_STP_BIT) << E4_STP_BIT);
+	
+	//XY_STP_PORT = (XY_STP_PORT & ~XY_STP_MASK) | (step_port_invert_mask & XY_STP_MASK);
+	//Z_STP_PORT = (Z_STP_PORT & ~(1<<Z_STP_BIT)) | (step_port_invert_mask & (1<<Z_STP_BIT));
+	//A_STP_PORT = (A_STP_PORT & ~(1<<A_STP_BIT)) | (step_port_invert_mask & (1<<A_STP_BIT));
+	
 }
 
 // Initialize and start the stepper motor subsystem
 void stepper_init() {
     
 	// Configure step and direction interface pins
-	XY_STP_DDR |= XY_STP_MASK;
-	Z_STP_DDR |= (1 << Z_STP_BIT);
-	A_STP_DDR |= (1 << A_STP_BIT);
+	E2_DIR_DDR|=(1<<E2_DIR_BIT);
+	E2_STP_DDR|=(1<<E2_STP_BIT);
+	E2_ENA_DDR|=(1<<E2_ENA_BIT);
 	
-	XY_DIR_DDR |= XY_DIR_MASK;
-	Z_DIR_DDR |= (1 << Z_DIR_BIT); 
-	A_DIR_DDR |= (1 << A_DIR_BIT); 
+	E3_DIR_DDR|=(1<<E3_DIR_BIT);
+	E3_STP_DDR|=(1<<E3_STP_BIT);
+	E3_ENA_DDR|=(1<<E3_ENA_BIT);
+
+	E4_DIR_DDR|=(1<<E4_DIR_BIT);
+	E4_STP_DDR|=(1<<E4_STP_BIT);
+	E4_ENA_DDR|=(1<<E4_ENA_BIT);
 	
-	X_ENA_DDR |= (1 << X_ENA_BIT);
-	Y_ENA_DDR |= (1 << Y_ENA_BIT);
-	Z_ENA_DDR |= (1 << Z_ENA_BIT);
-	A_ENA_DDR |= (1 << A_ENA_BIT);
+	E0_DIR_DDR|=(1<<E0_DIR_BIT);
+	E0_STP_DDR|=(1<<E0_STP_BIT);
+	E0_ENA_DDR|=(1<<E0_ENA_BIT);
+	
+	E1_DIR_DDR|=(1<<E1_DIR_BIT);
+	E1_STP_DDR|=(1<<E1_STP_BIT);
+	E1_ENA_DDR|=(1<<E1_ENA_BIT);
+	
+	//XY_STP_DDR |= XY_STP_MASK;
+	//Z_STP_DDR |= (1 << Z_STP_BIT);
+	//A_STP_DDR |= (1 << A_STP_BIT);
+	
+	//XY_DIR_DDR |= XY_DIR_MASK;
+	//Z_DIR_DDR |= (1 << Z_DIR_BIT); 
+	//A_DIR_DDR |= (1 << A_DIR_BIT); 
+	
+	//X_ENA_DDR |= (1 << X_ENA_BIT);
+	//Y_ENA_DDR |= (1 << Y_ENA_BIT);
+	//Z_ENA_DDR |= (1 << Z_ENA_BIT);
+	//A_ENA_DDR |= (1 << A_ENA_BIT);
 	
     // Configure Timer 1: Stepper Driver Interrupt
     TCCR1B &= ~(1 << WGM13); // waveform generation = 0100 = CTC
