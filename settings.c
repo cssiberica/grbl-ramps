@@ -343,7 +343,6 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
 
 
 // Initialize the config subsystem
-
 void settings_init() {
     if (!read_global_settings()) {
         report_status_message(STATUS_SETTING_READ_FAIL);
@@ -366,39 +365,35 @@ void settings_init() {
 
 
 // Returns step pin mask according to Grbl internal axis indexing.
-
 uint8_t get_step_pin_mask(uint8_t axis_idx) {
     if (axis_idx == X_AXIS) {
-        return ((1 << E2_STP_BIT));
+        return ((1 << X_STP_BIT));
     }
     if (axis_idx == Y_AXIS) {
-        return ((1 << E3_STP_BIT));
+        return ((1 << Y_STP_BIT));
     }
     if (axis_idx == Z_AXIS) {
-        return ((1 << E0_STP_BIT));
+        return ((1 << Z_STP_BIT));
     }
-    return ((1 << E1_STP_BIT));
+    return ((1 << A_STP_BIT));
 
 }
 
-
 // Returns direction pin mask according to Grbl internal axis indexing.
-
 uint8_t get_direction_pin_mask(uint8_t axis_idx) {
     if (axis_idx == X_AXIS) {
-        return ((1 << E2_DIR_BIT));
+        return ((1 << X_DIR_BIT));
     }
     if (axis_idx == Y_AXIS) {
-        return ((1 << E3_DIR_BIT));
+        return ((1 << Y_DIR_BIT));
     }
     if (axis_idx == Z_AXIS) {
-        return ((1 << E0_DIR_BIT));
+        return ((1 << Z_DIR_BIT));
     }
-    return ((1 << E1_DIR_BIT));
+    return ((1 << A_DIR_BIT));
 }
 
 // Returns limit pin mask according to Grbl internal axis indexing.
-
 uint8_t get_limit_pin_mask(uint8_t axis_idx) {
     if (axis_idx == X_AXIS) {
         return ((1 << X_LIMIT_BIT));
